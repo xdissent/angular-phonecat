@@ -50,14 +50,18 @@ describe('PhoneCat App', function() {
 
       expect(getNames()).toEqual([
         "Motorola XOOM\u2122 with Wi-Fi",
-        "MOTOROLA XOOM\u2122"
+        "MOTOROLA XOOM\u2122",
+        "Dell Streak 7",
+        "Samsung Galaxy Tab\u2122"
       ]);
 
       element(by.model('orderProp')).findElement(by.css('option[value="name"]')).click();
 
       expect(getNames()).toEqual([
+        "Dell Streak 7",
         "MOTOROLA XOOM\u2122",
-        "Motorola XOOM\u2122 with Wi-Fi"
+        "Motorola XOOM\u2122 with Wi-Fi",
+        "Samsung Galaxy Tab\u2122"
       ]);
     });
 
