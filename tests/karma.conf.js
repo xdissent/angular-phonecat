@@ -4,13 +4,19 @@ module.exports = function(config){
     basePath : '../',
 
     files : [
-      'bower_components/angular/angular.js',
-      'bower_components/angular-route/angular-route.js',
-      'bower_components/angular-resource/angular-resource.js',
-      'bower_components/angular-animate/angular-animate.js',
-      'bower_components/angular-mocks/angular-mocks.js',
-      'app/js/**/*.js',
-      'test/unit/**/*.js'
+      'tests/rtd/lib/*-stubs.js',
+      'tests/rtd/lib/*-stubs.coffee',
+      'tests/helper/jquery.js',
+      '.meteor/local/bower/angular/angular.js',
+      '.meteor/local/bower/angular-route/angular-route.js',
+      '.meteor/local/bower/angular-animate/angular-animate.js',
+      'tests/helper/angular-mocks.js',
+      'tests/helper/angularite-mock.js',
+      'client/**/*.coffee',
+      'client/**/*.js',
+      'server/**/*.js',
+      'common/**/*.js',
+      'tests/unit/**/*.js'
     ],
 
     autoWatch : true,
@@ -22,12 +28,17 @@ module.exports = function(config){
     plugins : [
             'karma-chrome-launcher',
             'karma-firefox-launcher',
-            'karma-jasmine'
+            'karma-jasmine',
+            'karma-coffee-preprocessor'
             ],
 
     junitReporter : {
       outputFile: 'test_out/unit.xml',
       suite: 'unit'
+    },
+
+    preprocessors: {
+      '**/*.coffee': ['coffee']
     }
 
   });
