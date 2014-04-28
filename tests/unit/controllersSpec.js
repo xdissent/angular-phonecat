@@ -3,25 +3,34 @@
 /* jasmine specs for controllers go here */
 describe('PhoneCat controllers', function() {
 
+  var result, computation = null;
+
   beforeEach(function(){
     this.addMatchers({
       toEqualData: function(expected) {
         return angular.equals(this.actual, expected);
       }
     });
+
+    result = [];
+    computation = {stop: function () {}, fn: null};
+    Deps.autorun = function(fn) {
+      fn(computation);
+      computation.fn = fn;
+    };
+    Phones.find = function(sel, opts) {
+      return {fetch: function () { return result; }};
+    };
   });
 
   beforeEach(module('phonecatApp'));
   beforeEach(module('phonecatServices'));
 
   describe('PhoneListCtrl', function(){
-    var scope, ctrl, $httpBackend;
+    var scope, ctrl, $timeout;
 
-    beforeEach(inject(function(_$httpBackend_, $rootScope, $controller) {
-      $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('phones/phones.json').
-          respond([{name: 'Nexus S'}, {name: 'Motorola DROID'}]);
-
+    beforeEach(inject(function(_$timeout_, $rootScope, $controller) {
+      $timeout = _$timeout_;
       scope = $rootScope.$new();
       ctrl = $controller('PhoneListCtrl', {$scope: scope});
     }));
@@ -29,7 +38,10 @@ describe('PhoneCat controllers', function() {
 
     it('should create "phones" model with 2 phones fetched from xhr', function() {
       expect(scope.phones).toEqualData([]);
-      $httpBackend.flush();
+
+      result = [{name: 'Nexus S'}, {name: 'Motorola DROID'}];
+      computation.fn(computation);
+      $timeout.flush();
 
       expect(scope.phones).toEqualData(
           [{name: 'Nexus S'}, {name: 'Motorola DROID'}]);
@@ -43,7 +55,7 @@ describe('PhoneCat controllers', function() {
 
 
   describe('PhoneDetailCtrl', function(){
-    var scope, $httpBackend, ctrl,
+    var scope, $timeout, ctrl,
         xyzPhoneData = function() {
           return {
             name: 'phone xyz',
@@ -52,10 +64,8 @@ describe('PhoneCat controllers', function() {
         };
 
 
-    beforeEach(inject(function(_$httpBackend_, $rootScope, $routeParams, $controller) {
-      $httpBackend = _$httpBackend_;
-      $httpBackend.expectGET('phones/xyz.json').respond(xyzPhoneData());
-
+    beforeEach(inject(function(_$timeout_, $rootScope, $routeParams, $controller) {
+      $timeout = _$timeout_;
       $routeParams.phoneId = 'xyz';
       scope = $rootScope.$new();
       ctrl = $controller('PhoneDetailCtrl', {$scope: scope});
@@ -64,7 +74,10 @@ describe('PhoneCat controllers', function() {
 
     it('should fetch phone detail', function() {
       expect(scope.phone).toEqualData({});
-      $httpBackend.flush();
+
+      result = [xyzPhoneData()];
+      computation.fn(computation);
+      $timeout.flush();
 
       expect(scope.phone).toEqualData(xyzPhoneData());
     });
