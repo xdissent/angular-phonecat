@@ -15,8 +15,14 @@ phonecatControllers.controller('PhoneListCtrl', ['$scope', 'Phone',
 
 phonecatControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
   function($scope, $routeParams, Phone) {
-    $scope.phone = Phone.get({phoneId: $routeParams.phoneId}, function(phone) {
-      $scope.mainImageUrl = phone.images[0];
+    $scope.phone = Phone.findOne({id: $routeParams.phoneId});
+
+    $scope.$watch('phone', function(phone) {
+      $scope.mainImageUrl = phone.images && phone.images[0];
+    }, true);
+
+    $scope.$on('$destroy', function() {
+      $scope.phone.$stop();
     });
 
     $scope.setImage = function(imageUrl) {
