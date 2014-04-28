@@ -1,5 +1,6 @@
 {
   "packages": {
-    "bower": {}
+    "bower": {},
+    "bootstrap-3": {}
   }
 }
