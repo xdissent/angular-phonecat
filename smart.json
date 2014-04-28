@@ -5,7 +5,7 @@
     "angularite": {}
   },
   "bower": {
-    "angular-route": "1.2.16",
-    "angular-animate": "1.2.16"
+    "angular-route": "1.2.14",
+    "angular-animate": "1.2.14"
   }
 }
