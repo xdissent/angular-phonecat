@@ -6,8 +6,11 @@ var phonecatControllers = angular.module('phonecatControllers', []);
 
 phonecatControllers.controller('PhoneListCtrl', ['$scope', 'Phone',
   function($scope, Phone) {
-    $scope.phones = Phone.query();
+    $scope.phones = Phone.find();
     $scope.orderProp = 'age';
+    $scope.$on('$destroy', function() {
+      $scope.phones && $scope.phones.$stop();
+    });
   }]);
 
 phonecatControllers.controller('PhoneDetailCtrl', ['$scope', '$routeParams', 'Phone',
