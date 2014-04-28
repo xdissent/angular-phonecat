@@ -3,5 +3,9 @@
     "bower": {},
     "bootstrap-3": {},
     "angularite": {}
+  },
+  "bower": {
+    "angular-route": "1.2.16",
+    "angular-animate": "1.2.16"
   }
 }
