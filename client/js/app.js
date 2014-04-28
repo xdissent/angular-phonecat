@@ -2,7 +2,7 @@
 
 /* App Module */
 
-var phonecatApp = angular.module('phonecatApp', [
+var phonecatApp = Angularite.module('phonecatApp', [
   'ngRoute',
   'phonecatAnimations',
 
@@ -26,3 +26,5 @@ phonecatApp.config(['$routeProvider',
         redirectTo: '/phones'
       });
   }]);
+
+Angularite.setTemplateDelimeter('{{', '}}');
