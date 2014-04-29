@@ -3,7 +3,7 @@
 /* jasmine specs for controllers go here */
 describe('PhoneCat controllers', function() {
 
-  var result, computation = null;
+  var rerun, result;
 
   beforeEach(function(){
     this.addMatchers({
@@ -13,14 +13,13 @@ describe('PhoneCat controllers', function() {
     });
 
     result = [];
-    computation = {stop: function () {}, fn: null};
-    Deps.autorun = function(fn) {
-      fn(computation);
-      computation.fn = fn;
-    };
-    Phones.find = function(sel, opts) {
-      return {fetch: function () { return result; }};
-    };
+    spyOn(Phones, 'find').andCallFake(function() {
+      return {fetch: function() { return result; }};
+    });
+    spyOn(Deps, 'autorun').andCallFake(function(fn) {
+      rerun = function() { fn({stop: function() {}}); };
+      rerun();
+    });
   });
 
   beforeEach(module('phonecatApp'));
@@ -40,7 +39,7 @@ describe('PhoneCat controllers', function() {
       expect(scope.phones).toEqualData([]);
 
       result = [{name: 'Nexus S'}, {name: 'Motorola DROID'}];
-      computation.fn(computation);
+      rerun();
       $timeout.flush();
 
       expect(scope.phones).toEqualData(
@@ -76,7 +75,7 @@ describe('PhoneCat controllers', function() {
       expect(scope.phone).toEqualData({});
 
       result = [xyzPhoneData()];
-      computation.fn(computation);
+      rerun();
       $timeout.flush();
 
       expect(scope.phone).toEqualData(xyzPhoneData());
